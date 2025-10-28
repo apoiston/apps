@@ -4,7 +4,7 @@
 ## A. 从软件源安装（推荐）
 
 ```shell
-curl -s https://infinityapps.pages.dev/feed.sh | ash
+wget -qO- https://infinityapps.pages.dev/feed.sh | ash
 ```
 
 **提示**：推荐此方式，只需运行一次，后续可以通过 upgrade 升级。
@@ -12,7 +12,7 @@ curl -s https://infinityapps.pages.dev/feed.sh | ash
 ## B. 从发布版本安装
 
 ```shell
-curl -s https://infinityapps.pages.dev/install.sh | ash
+wget -qO- https://infinityapps.pages.dev/install.sh | ash
 ```
 
 ## 插件信息
