@@ -1,0 +1,86 @@
+Package: luci-app-momo
+Version: 1.0.5-r1
+Depends: libc, luci-base, momo
+Section: luci
+URL: https://github.com/openwrt/luci
+Architecture: all
+Installed-Size: 40960
+Filename: luci-app-momo_1.0.5-r1_all.ipk
+Size: 6612
+SHA256sum: cdd18954b6e542c1b8342f408abebb066735058eddedee18241dc85ae950fade
+Description:  LuCI Support for momo
+
+Package: luci-app-nikki
+Version: 1.24.3-r1
+Depends: libc, luci-base, nikki
+Section: luci
+URL: https://github.com/openwrt/luci
+Architecture: all
+Installed-Size: 61440
+Filename: luci-app-nikki_1.24.3-r1_all.ipk
+Size: 10028
+SHA256sum: e0e9634552598cb3b326bf8600bf79c7497087f219455226ea1e8a8372ab3c8a
+Description:  LuCI Support for nikki
+
+Package: luci-i18n-momo-zh-cn
+Version: 25.242.29264~3cf77ab
+Depends: libc, luci-app-momo
+Section: luci
+Architecture: all
+Installed-Size: 10240
+Filename: luci-i18n-momo-zh-cn_25.242.29264~3cf77ab_all.ipk
+Size: 2478
+SHA256sum: 0c3f2eae0cc8af5c328609a77a425e57c58b7ae54b9b75cfa5344d5c77f71b98
+Description:  Translation for luci-app-momo - 简体中文 (Simplified Chinese)
+
+Package: luci-i18n-nikki-zh-cn
+Version: 25.304.34598~31a54fd
+Depends: libc, luci-app-nikki
+Section: luci
+Architecture: all
+Installed-Size: 20480
+Filename: luci-i18n-nikki-zh-cn_25.304.34598~31a54fd_all.ipk
+Size: 4878
+SHA256sum: 4bbae7bc968142710058ef7710743e333dacf008f1fdaeaa43ee04d5b8af5326
+Description:  Translation for luci-app-nikki - 简体中文 (Simplified Chinese)
+
+Package: momo
+Version: 2025.08.11-r3
+Depends: libc, ca-bundle, curl, firewall4, ip-full, kmod-inet-diag, kmod-nft-socket, kmod-nft-tproxy, kmod-tun, sing-box
+License: GPL-3.0+
+Section: net
+URL: https://sing-box.sagernet.org
+Architecture: x86_64
+Installed-Size: 542720
+Filename: momo_2025.08.11-r3_x86_64.ipk
+Size: 81697
+SHA256sum: e5a459a49957667af8ca000f185f3c816cd1fa17532fe51e7af9870051540b3e
+Description:  The universal proxy platform.
+
+Package: nikki-geodata
+Version: 2025.11.01
+Depends: libc
+License: GPL-3.0
+Section: net
+URL: https://wiki.metacubex.one
+Architecture: all
+Installed-Size: 52930560
+Filename: nikki-geodata_2025.11.01_all.ipk
+Size: 17550904
+SHA256sum: 63c790e9adfe611c6a8e88b61eb27ce89c53eeadb6589d8453536e6c0219ed61
+Description:  Nikki Geodata (GeoIP, Geosite, ASN, Country)
+
+Package: nikki
+Version: 2025.10.31~99e68e9-r1
+Depends: libc, ca-bundle, curl, yq, firewall4, ip-full, kmod-inet-diag, kmod-nft-socket, kmod-nft-tproxy, kmod-tun
+Provides: mihomo
+License: GPL3.0+
+Section: net
+URL: https://wiki.metacubex.one
+Architecture: x86_64
+Installed-Size: 34232320
+Filename: nikki_2025.10.31~99e68e9-r1_x86_64.ipk
+Size: 12349165
+SHA256sum: 3e6610a733f617df18137d268ac0a299b860d6036e84ce9adeaa8f6d6bcf5594
+Description:  A rule based proxy in Go.
+
