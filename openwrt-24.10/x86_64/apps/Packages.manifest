@@ -1,0 +1,113 @@
+Package: luci-app-momo
+Version: 1.0.5-r1
+Depends: libc, luci-base, momo
+Source: /feed/openwrt-momo/luci-app-momo
+SourceName: luci-app-momo
+Section: luci
+SourceDateEpoch: 1762565892
+URL: https://github.com/openwrt/luci
+Maintainer: OpenWrt LuCI community
+Architecture: all
+Installed-Size: 40960
+Filename: luci-app-momo_1.0.5-r1_all.ipk
+Size: 6619
+SHA256sum: 288fc28f253ce5a3948e13fa00d3f428b5f814f5e33d730147ad9103986b1fcc
+Description:  LuCI Support for momo
+
+Package: luci-app-nikki
+Version: 1.24.4-r1
+Depends: libc, luci-base, nikki
+Source: /feed/openwrt-nikki/luci-app-nikki
+SourceName: luci-app-nikki
+Section: luci
+SourceDateEpoch: 1762682358
+URL: https://github.com/openwrt/luci
+Maintainer: OpenWrt LuCI community
+Architecture: all
+Installed-Size: 61440
+Filename: luci-app-nikki_1.24.4-r1_all.ipk
+Size: 10044
+SHA256sum: 27791cb899eef8f93b02f9c11f4f95f25c126fb63f88c3af765ac998f2a2d786
+Description:  LuCI Support for nikki
+
+Package: luci-i18n-momo-zh-cn
+Version: 25.312.05892~c269d89
+Depends: libc, luci-app-momo
+Source: /feed/openwrt-momo/luci-app-momo
+SourceName: luci-app-momo
+Section: luci
+SourceDateEpoch: 1762565892
+Architecture: all
+Installed-Size: 10240
+Filename: luci-i18n-momo-zh-cn_25.312.05892~c269d89_all.ipk
+Size: 2480
+SHA256sum: 1cb7f8d2564783aca0b6a1f35634ccda51f3e62d51e742c0a5dd9853a8d06feb
+Description:  Translation for luci-app-momo - 简体中文 (Simplified Chinese)
+
+Package: luci-i18n-nikki-zh-cn
+Version: 25.313.35958~c2179bd
+Depends: libc, luci-app-nikki
+Source: /feed/openwrt-nikki/luci-app-nikki
+SourceName: luci-app-nikki
+Section: luci
+SourceDateEpoch: 1762682358
+Architecture: all
+Installed-Size: 20480
+Filename: luci-i18n-nikki-zh-cn_25.313.35958~c2179bd_all.ipk
+Size: 4892
+SHA256sum: 7b3609f1885ca5bece53a01451a36818d5ce59d121c9065cce2a7f10bec670ce
+Description:  Translation for luci-app-nikki - 简体中文 (Simplified Chinese)
+
+Package: momo
+Version: 2025.08.11-r3
+Depends: libc, ca-bundle, curl, firewall4, ip-full, kmod-inet-diag, kmod-nft-socket, kmod-nft-tproxy, kmod-tun, sing-box
+Source: /feed/openwrt-momo/momo
+SourceName: momo
+License: GPL-3.0+
+Section: net
+SourceDateEpoch: 1762565892
+URL: https://sing-box.sagernet.org
+Maintainer: Joseph Mory <morytyann@gmail.com>
+Architecture: x86_64
+Installed-Size: 542720
+Filename: momo_2025.08.11-r3_x86_64.ipk
+Size: 81781
+SHA256sum: 1dc996fa6924cd44ea578d2b41a59c0a1a7912aef096eaadb04285cb6790afc8
+Description:  The universal proxy platform.
+
+Package: nikki-geodata
+Version: 2025.11.22
+Depends: libc
+Source: /feed/nikki-geodata
+SourceName: nikki-geodata
+License: GPL-3.0
+LicenseFiles: LICENSE
+Section: net
+SourceDateEpoch: 1742559522
+URL: https://wiki.metacubex.one
+Maintainer: apois <apoislau@gmail.com>
+Architecture: all
+Installed-Size: 51251200
+Filename: nikki-geodata_2025.11.22_all.ipk
+Size: 16963383
+SHA256sum: af62bfd93474e5806cb1844d605e9e27b35d2ae563bf1633c48c0c53b22b2f0a
+Description:  Nikki Geodata (GeoIP, Geosite, ASN, Country)
+
+Package: nikki
+Version: 2025.11.22~5aa140c-r1
+Depends: libc, ca-bundle, curl, yq, firewall4, ip-full, kmod-inet-diag, kmod-nft-socket, kmod-nft-tproxy, kmod-tun
+Provides: mihomo
+Source: /feed/openwrt-nikki/nikki
+SourceName: nikki
+License: GPL3.0+
+Section: net
+SourceDateEpoch: 1762682358
+URL: https://wiki.metacubex.one
+Maintainer: Joseph Mory <morytyann@gmail.com>
+Architecture: x86_64
+Installed-Size: 34242560
+Filename: nikki_2025.11.22~5aa140c-r1_x86_64.ipk
+Size: 12368892
+SHA256sum: 1fcdd8e1959df4c42dd97abf0a3ec8bf4b35f1dd2fbb1026357dda86a28770fa
+Description:  A rule based proxy in Go.
+
