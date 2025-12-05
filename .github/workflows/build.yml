@@ -1,0 +1,169 @@
+name: build
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 23 * * *"
+
+env:
+  TZ: Asia/Shanghai
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    outputs:
+      latest_pkg_version: ${{ steps.extract.outputs.latest_pkg_version }}
+      latest_pkg_source_version: ${{ steps.extract.outputs.latest_pkg_source_version }}
+      latest_pkg_mirror_hash: ${{ steps.extract.outputs.latest_pkg_mirror_hash }}
+      commit_sha_short: ${{ steps.extract.outputs.commit_sha_short }}
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          repository: 'MetaCubeX/mihomo'
+          ref: 'Alpha'
+          path: 'mihomo'
+
+      - name: extract info
+        id: extract
+        run: |
+          commit_date=$(git -C mihomo log -n 1 --format="%cd" --date=format:"%Y.%m.%d")
+          commit_sha=$(git -C mihomo rev-parse HEAD)
+          commit_sha_short=$(git -C mihomo rev-parse --short HEAD)
+          git -C mihomo config tar.xz.command "xz -c"
+          git -C mihomo archive --output=$PWD/mihomo.tar.xz HEAD
+          echo "commit_sha_short=${commit_sha_short}" >> $GITHUB_OUTPUT          
+          echo "latest_pkg_version=${commit_date}~${commit_sha_short}" >> $GITHUB_OUTPUT
+          echo "latest_pkg_source_version=${commit_sha}" >> $GITHUB_OUTPUT
+          echo "latest_pkg_mirror_hash=$(sha256sum mihomo.tar.xz | cut -d ' ' -f 1)" >> $GITHUB_OUTPUT
+
+  build:
+    needs: fetch
+    name: build ${{ matrix.arch }}-${{ matrix.branch }}
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+          - x86_64
+        branch:
+          - SNAPSHOT
+          - openwrt-24.10
+
+    steps:
+      - name: set timezone
+        run: |
+          sudo timedatectl set-timezone Asia/Shanghai
+          date +"%Y-%m-%d %H:%M:%S %Z"
+        env:
+          TZ: Asia/Shanghai
+
+      - name: system info
+        run: |
+          date +"%Y-%m-%d %H:%M:%S %Z"
+          lscpu | grep -E '^Architecture|^CPU\(s\):|^Model name'
+          uname -sr
+          lsb_release -a
+          free -h
+          df -Th
+
+      - name: checkout nikki
+        uses: actions/checkout@v4
+        with:
+          repository: nikkinikki-org/OpenWrt-nikki
+          ref: main
+          path: openwrt-nikki
+  
+      - name: checkout nikki-geodata
+        uses: actions/checkout@v4
+        with:
+          repository: apoiston/nikki-geodata
+          ref: main
+          path: nikki-geodata
+
+      - name: checkout momo
+        uses: actions/checkout@v4
+        with:
+          repository: nikkinikki-org/OpenWrt-momo
+          ref: main
+          path: openwrt-momo
+
+      - name: update
+        run: |
+          if ! grep -q "PKG_BUILD_VERSION:=" openwrt-nikki/nikki/Makefile; then
+              sed -i '/PKG_BUILD_TIME:=/i PKG_BUILD_VERSION:=' openwrt-nikki/nikki/Makefile
+          fi
+          sed -i '/GO_PKG_LDFLAGS_X:=/ s/PKG_SOURCE_VERSION/PKG_BUILD_VERSION/' openwrt-nikki/nikki/Makefile
+          sed -i "s/PKG_VERSION:=.*/PKG_VERSION:=${{ needs.fetch.outputs.latest_pkg_version }}/" openwrt-nikki/nikki/Makefile
+          sed -i "s/PKG_SOURCE_VERSION:=.*/PKG_SOURCE_VERSION:=${{ needs.fetch.outputs.latest_pkg_source_version }}/" openwrt-nikki/nikki/Makefile
+          sed -i "s/PKG_MIRROR_HASH:=.*/PKG_MIRROR_HASH:=${{ needs.fetch.outputs.latest_pkg_mirror_hash }}/" openwrt-nikki/nikki/Makefile
+          sed -i "s/PKG_BUILD_VERSION:=.*/PKG_BUILD_VERSION:=alpha-${{ needs.fetch.outputs.commit_sha_short }}/" openwrt-nikki/nikki/Makefile
+
+      - name: show info
+        run: |
+          ls -l $GITHUB_WORKSPACE
+          grep -o 'PKG_VERSION:.*' openwrt-nikki/nikki/Makefile | cut -d '=' -f 2
+          grep -o 'PKG_BUILD_VERSION:.*' openwrt-nikki/nikki/Makefile | cut -d '=' -f 2
+
+      - name: build
+        uses: apoiston/gh-action-sdk@main
+        env:
+          ARCH: ${{ matrix.arch }}-${{ matrix.branch }}
+          FEEDNAME: apps
+          PACKAGES: luci-app-nikki nikki-geodata luci-app-momo
+          INDEX: 1
+          NO_REFRESH_CHECK: true
+          KEY_BUILD: ${{ secrets.KEY_BUILD }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
+
+      - name: compress
+        run: |
+          mkdir -p public/${{ matrix.branch }}/${{ matrix.arch }}
+          mv bin/packages/${{ matrix.arch }}/apps public/${{ matrix.branch }}/${{ matrix.arch }}
+          tar -c -z -f apps_${{ matrix.arch }}-${{ matrix.branch }}.tar.gz public/${{ matrix.branch }}/${{ matrix.arch }}
+
+      - name: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: apps_${{ matrix.arch }}-${{ matrix.branch }}
+          path: apps_${{ matrix.arch }}-${{ matrix.branch }}.tar.gz
+
+  deploy:
+    needs: [build, fetch]
+    name: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: download
+        uses: actions/download-artifact@v4
+        with:
+          pattern: apps_*
+          merge-multiple: true
+
+      - name: uncompress
+        run: |
+          for file in apps_*.tar.gz; do tar -x -z -f "$file"; done
+
+      - name: prepare
+        run: |
+          echo "${{ secrets.KEY_BUILD_PUB }}" > public/key-build.pub
+          echo "${{ secrets.PUBLIC_KEY }}" > public/public-key.pem
+          git clone -b apps https://github.com/apoiston/index.git
+          sed -i "s/N\/A/$(date +"%Y-%m-%d %H:%M:%S %Z")/g" index/index.html
+          git clone -b main --single-branch https://github.com/apoiston/apps.git
+          cp -a index/*.{html,css,js} apps/*.sh public/
+          ls -l public 
+
+      - name: deploy pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"          
+          publish_branch: apps
+          publish_dir: ./public
+          force_orphan: true
+          full_commit_message: "build: update to alpha-${{ needs.fetch.outputs.commit_sha_short }}"
