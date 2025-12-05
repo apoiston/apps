@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "architecture": "x86_64",
+  "packages": {
+    "luci-app-momo": "1.0.5-r1",
+    "luci-app-nikki": "1.24.4-r1",
+    "luci-i18n-momo-zh-cn": "25.337.31246~3a29395",
+    "luci-i18n-nikki-zh-cn": "25.337.31267~712807d",
+    "momo": "2025.08.11-r3",
+    "nikki": "2025.12.05~f44aa22-r1",
+    "nikki-geodata": "2025.12.06"
+  }
+}

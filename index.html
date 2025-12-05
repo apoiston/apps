@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>infinityapps</title>
+    <link rel="stylesheet" href="main.css">
+    <script src="main.js" defer></script>
+</head>
+<body>
+    <h2>软件包信息</h2>
+    <p>更新时间: 2025-12-06 07:46:14 CST</p>
+    <div>
+        <p>SNAPSHOT</p>
+        <table id="snapshotTable">
+            <thead>
+                <tr>
+                    <th>软件包名称</th>
+                    <th>版本</th>
+                    <th>下载</th>
+                </tr>
+            </thead>
+            <tbody id="SNAPSHOT">
+                <tr><td colspan="3">Loading...</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <p>openwrt-24.10</p>
+        <table id="releaseTable">
+            <thead>
+                <tr>
+                    <th>软件包名称</th>
+                    <th>版本</th>
+                    <th>下载</th>
+                </tr>
+            </thead>
+            <tbody id="2410">
+                <tr><td colspan="3">Loading...</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <h2>A. Install From Feed (Recommended)</h2>
+    <pre>
+        <code>wget -q -O- https://infinityapps.pages.dev/feed.sh | ash</code>
+    </pre>
+    <h2>B. Install From Release</h2>      
+    <pre>
+        <code>wget -q -O- https://infinityapps.pages.dev/install.sh | ash</code>
+    </pre>     
+</body>
+</html>
